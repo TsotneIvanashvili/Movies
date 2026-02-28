@@ -61,6 +61,127 @@ button { font-family: inherit; }
   100% { opacity: 0; top: 14px; }
 }
 
+/* ── LOADING SCREEN KEYFRAMES ──────────────────────────── */
+@keyframes ls-char-in {
+  from { opacity: 0; transform: translateY(40px) scale(0.65); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+@keyframes ls-rule-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes ls-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes ls-progress {
+  from { width: 0%;   }
+  to   { width: 100%; }
+}
+@keyframes ls-reel-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── NAVBAR LOGO PULSE ─────────────────────────────────── */
+@keyframes nav-logo-pulse {
+  0%, 100% { text-shadow: none; }
+  50%       { text-shadow: 0 0 18px rgba(229,9,20,.65), 0 0 40px rgba(229,9,20,.2); }
+}
+
+/* ============================================================
+   LOADING SCREEN
+   ============================================================ */
+.ls {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .55s ease;
+}
+.ls--exit { opacity: 0; pointer-events: none; }
+
+.ls__inner {
+  display: flex; flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+/* Film reel */
+.ls__reel {
+  width: 80px; height: 80px;
+  opacity: 0;
+  transition: opacity .4s ease .1s;
+}
+.ls__inner--in .ls__reel {
+  opacity: 1;
+  animation: ls-reel-spin 5s linear infinite;
+}
+
+/* Logo */
+.ls__logo {
+  display: flex;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.ls__ch {
+  display: inline-block;
+  opacity: 0;
+  color: var(--text);
+}
+.ls__ch--red { color: var(--accent); }
+.ls__inner--in .ls__ch {
+  animation: ls-char-in .5s cubic-bezier(.34,1.56,.64,1) forwards;
+  animation-delay: calc(var(--d) + 100ms);
+}
+
+/* Red rule */
+.ls__rule {
+  height: 2px;
+  width: clamp(200px, 28vw, 380px);
+  background: linear-gradient(90deg, var(--accent), var(--accent-h));
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.ls__inner--in .ls__rule {
+  animation: ls-rule-grow .55s ease .75s forwards;
+}
+
+/* Tagline */
+.ls__sub {
+  font-size: clamp(.7rem, 1.4vw, .85rem);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--text3);
+  opacity: 0;
+}
+.ls__inner--in .ls__sub {
+  animation: ls-fade-up .45s ease 1s forwards;
+}
+
+/* Progress bar */
+.ls__track {
+  width: clamp(180px, 22vw, 280px);
+  height: 2px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+  opacity: 0;
+}
+.ls__inner--in .ls__track {
+  animation: ls-fade-up .3s ease 1.1s forwards;
+}
+.ls__fill {
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-h));
+  border-radius: 2px;
+}
+.ls__inner--in .ls__fill {
+  animation: ls-progress 1.3s cubic-bezier(.4,0,.2,1) 1.2s forwards;
+}
+
 /* ── SCROLL REVEAL ─────────────────────────────────────── */
 .reveal {
   opacity: 0;
@@ -167,7 +288,10 @@ button { font-family: inherit; }
   transition: opacity var(--t);
 }
 .nav-logo:hover { opacity: .75; }
-.nav-logo span { color: var(--accent); }
+.nav-logo span {
+  color: var(--accent);
+  animation: nav-logo-pulse 4s ease-in-out infinite;
+}
 
 /* Desktop nav links */
 .nav-links {
